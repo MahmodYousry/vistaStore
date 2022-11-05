@@ -19,9 +19,7 @@
 			$allItems = $stmt->fetchAll();
 
 			foreach ($allItems as $item) {
-
-				echo $item[1];
-
+				
 				// get item images by item id
 				$stmtimg = $con->prepare("SELECT * FROM item_imgs WHERE item_ID = ?");
 				$stmtimg->execute([$item['Item_ID']]);

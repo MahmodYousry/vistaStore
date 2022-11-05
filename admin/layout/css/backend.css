@@ -494,6 +494,13 @@ h1 {
   max-width: 400px;
   overflow: scroll;
   display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.imgs_cont img {
+  max-width: 100%;
+  max-height: 300px;
 }
 
 .item-img-container {

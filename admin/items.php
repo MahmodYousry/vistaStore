@@ -26,9 +26,14 @@
 			$start_from = ($page-1) * $results_per_page;
 
 			// get data from courses by course_ID limit start from 0 and to all items in the page
-			$sql = "SELECT items.*, brand.name AS catgory_name, users.Username FROM ".$datatable." 
-							INNER JOIN brand ON brand.id = items.brand_id 
-							INNER JOIN users ON users.UserID = items.Member_ID 
+			$sql = "SELECT items.*,
+							brand.name AS brand_name,
+							users.Username,
+							type.type_name
+							FROM ".$datatable." 
+							JOIN brand ON brand.id = items.brand_id 
+							JOIN users ON users.UserID = items.Member_ID
+							JOIN type ON type.type_id = items.type_id
 							ORDER BY Item_ID DESC LIMIT $start_from, ".$results_per_page;
 			$rs_result = $con->query($sql);
 			$rowCout = $rs_result->fetchAll();
@@ -59,49 +64,50 @@
 								<td>Approve</td>
 								<td>price</td>
 								<td>Last_price_date</td>
-								<td>item_location</td>
+								<!-- <td>item_location</td> -->
 								<td>item_img</td>
-								<td>brand_id</td>
-								<td>Member_ID</td>
-								<td>type_id</td>
+								<td>brand</td>
+								<td>Member</td>
+								<td>type</td>
 								<td>options</td>
 							</tr>
 							
 							<?php
 
-								
-							
 								foreach ($rowCout as $item) {
 
 									// get the images in item_imgs table by item id
-									// $stmtimg = $con->prepare("SELECT * FROM item_imgs WHERE item_ID  = ?");
-									// $stmtimg->execute([$item['Item_ID']]);
-									// $itemImgs = $stmtimg->fetchAll();
-									
+									$stmtimg = $con->prepare("SELECT * FROM item_imgs WHERE item_ID = ?");
+									$stmtimg->execute([$item['Item_ID']]);
+									$itemImgs = $stmtimg->fetchAll();
+									$imgRowCount = $stmtimg->rowCount();
 
 									echo "<tr>";
 										echo "<td>" . $item['Item_ID'] . "</td>";
-
-											echo '<td>';
-
-												echo $item['item_name'];
-												// echo '<div class="imgs_cont">';
-												// foreach ($itemImgs as $itemImg) {
-												// 	echo "<img src='../products/" .$itemImg["img_src"]. "'>";
-												// }
-												echo '</div>';
-											echo '</td>';
-
-
+										echo '<td>' . $item['item_name'] . '</td>';
 										echo "<td>" . $item['number'] . "</td>";
 										echo "<td>" . $item['Approve'] . "</td>";
 										echo "<td>" . $item['price'] . "</td>";
 										echo "<td>" . $item['Last_price_date'] . "</td>";
-										echo "<td>" . $item['item_location'] . "</td>";
-										echo "<td>" . $item['item_img'] . "</td>";
-										echo "<td>" . $item['brand_id'] . "</td>";
-										echo "<td>" . $item['Member_ID'] . "</td>";
-										echo "<td>" . $item['type_id'] . "</td>";
+										//echo "<td>" . $item['item_location'] . "</td>";
+
+										echo "<td>";
+												
+													if (empty($itemImgs)) {
+														echo '<div class="alert alert-info" role="alert">No Images For This Item</div>';
+													} else {
+														echo '<div class="imgs_cont">';
+															foreach ($itemImgs as $itemImg) {
+																echo "<img src='../products/" . $itemImg["img_src"] . "'>";
+															}
+														echo '</div>';
+													}
+												
+										echo "</td>";
+
+										echo "<td>" . $item['brand_name'] . "</td>";
+										echo "<td>" . $item['Username'] . "</td>";
+										echo "<td>" . $item['type_name'] . "</td>";
 										echo "<td>
 												<a href='items.php?do=Edit&itemid=" . $item['Item_ID'] . "' class='btn btn-success' data-toggle='tooltip' data-placement='left' title='Edit this item'><i class='fa fa-edit'></i> Edit</a>";
 
@@ -566,7 +572,7 @@
 						<!-- END brand Field -->
 						<!-- Start type Field -->
 						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">brand</label>
+							<label class="col-sm-2 control-label">Type</label>
 							<div class="col-sm-10 col-md-6">
 								<select name="type" class="form-control">
 									<?php

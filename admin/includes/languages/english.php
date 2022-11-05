@@ -7,13 +7,13 @@
             //Navbar Links
 
             'HOME_ADMIN'    => 'Home',
-            'CATEGORIES'    => 'Categories',
+            'BRAND'         => 'Brand',
             'ITEMS'         => 'Items',
             'MEMBERS'       => 'Members',
             'COMMENTS'      => 'Comments',
             'STATISTICS'    => 'Statistics',
             'LOGS'          => 'Logs',
-            'STATUS'        => 'Status',
+            'TYPE'          => 'Types',
             ''  => '',
 
         );
