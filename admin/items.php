@@ -60,16 +60,16 @@
 							<tr>
 								<td>#ID</td>
 								<td>Name</td>
-								<td>number</td>
+								<td>Number</td>
 								<td>Approve</td>
-								<td>price</td>
+								<td>Price</td>
 								<td>Last_price_date</td>
 								<!-- <td>item_location</td> -->
-								<td>item_img</td>
-								<td>brand</td>
+								<td>Item Img</td>
+								<td>Brand</td>
 								<td>Member</td>
-								<td>type</td>
-								<td>options</td>
+								<td>Type</td>
+								<td>Options</td>
 							</tr>
 							
 							<?php
@@ -93,15 +93,15 @@
 
 										echo "<td>";
 												
-													if (empty($itemImgs)) {
-														echo '<div class="alert alert-info" role="alert">No Images For This Item</div>';
-													} else {
-														echo '<div class="imgs_cont">';
-															foreach ($itemImgs as $itemImg) {
-																echo "<img src='../products/" . $itemImg["img_src"] . "'>";
-															}
-														echo '</div>';
+											if (empty($itemImgs)) {
+												echo '<div class="alert alert-info" role="alert">No Images For This Item</div>';
+											} else {
+												echo '<div class="imgs_cont">';
+													foreach ($itemImgs as $itemImg) {
+														echo "<img src='../products/" . $itemImg["img_src"] . "'>";
 													}
+												echo '</div>';
+											}
 												
 										echo "</td>";
 
@@ -189,7 +189,6 @@
 						</div>
 					<?php 
 				echo '</div>';
-
 
 			}
 
