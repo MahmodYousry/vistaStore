@@ -196,143 +196,143 @@
 	  	} elseif ($do == 'Add') { ?>
 
 	  		<h1 class="text-center">Add New Item</h1>
-			<div class="container">
-				<form id="add_new_item" class="form-horizontal add-new-item" method="POST" enctype="multipart/form-data">
-					<!-- Start upload pic Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label" for="filepic">img</label>
-						<div class="col-sm-10 col-md-8 upload_section">
+				<div class="container">
+					<form id="add_new_item" class="form-horizontal add-new-item" method="POST" enctype="multipart/form-data">
+						<!-- Start upload pic Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label" for="filepic">img</label>
+							<div class="col-sm-10 col-md-8 upload_section">
 
-							<input type="file" class="form-control" id="gallery-photo-add" name="productpic" multiple>
+								<input type="file" class="form-control" id="gallery-photo-add" name="productpic" multiple>
 
-							<div id="progress_bar" class="progress add-item-progress">
-								<div id="progress_bar_process" class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+								<div id="progress_bar" class="progress add-item-progress">
+									<div id="progress_bar_process" class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+								</div>
+
+								<div id="uploaded_image" class="gallery"></div>
+								<div class="clearfix"></div>
+								<div id="upload_status"></div>
+
 							</div>
+						</div>
+						<!-- END upload pic Field -->
+						<!-- Start Name Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="text" name="name" class="form-control" required="required" placeholder="Item Name" />
+							</div>
+						</div>
+						<!-- END Name Field -->
+						<!-- Start Description Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Count</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="text" name="number" class="form-control" required="required" placeholder="How Many we have" />
+							</div>
+						</div>
+						<!-- END Description Field -->
+						<!-- Start Approve Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Approve</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="text" name="approve" class="form-control" required="required" placeholder="Is it approved ?" />
+							</div>
+						</div>
+						<!-- END Approve Field -->
+						<!-- Start Price Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Price</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="text" name="price" class="form-control" required="required" placeholder="Item Price" />
+							</div>
+						</div>
+						<!-- END Price Field -->
+						<!-- Start price date time Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Last Price date</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="date" class="form-control" name="lastPriceDate" value="" />
+							</div>
+						</div>
+						<!-- END price date time Field -->
 
-							<div id="uploaded_image" class="gallery"></div>
-							<div class="clearfix"></div>
-							<div id="upload_status"></div>
-
+						<!-- Start brand id Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Brand</label>
+							<div class="col-sm-10 col-md-8">
+								<select name="brand_id">
+									<option value="0">...</option>
+									<?php
+										$allbrands = getAllFrom("*", "brand", "", "", "id");
+										foreach ($allbrands as $brand) {
+											echo "<option value='" . $brand['id'] . "'>" . $brand['name'] . "</option>";
+										}
+									?>
+								</select>
+							</div>
 						</div>
-					</div>
-					<!-- END upload pic Field -->
-					<!-- Start Name Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Name</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="text" name="name" class="form-control" required="required" placeholder="Item Name" />
+						<!-- END brand id Field -->
+						<!-- Start Members Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Member</label>
+							<div class="col-sm-10 col-md-8">
+								<select name="member">
+									<option value="0">...</option>
+									<?php
+										$allMembers = getAllFrom("*", "users", "", "", "UserID");
+										foreach ($allMembers as $user) {
+											echo "<option value='" . $user['UserID'] . "'>" . $user['Username'] . "</option>";
+										}
+									?>
+								</select>
+							</div>
 						</div>
-					</div>
-					<!-- END Name Field -->
-					<!-- Start Description Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Count</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="text" name="number" class="form-control" required="required" placeholder="How Many we have" />
+						<!-- END Members Field -->
+						<!-- Start Categories Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Type</label>
+							<div class="col-sm-10 col-md-8">
+								<select name="Type">
+									<option value="0">...</option>
+									<?php
+										$alltypes = getAllFrom("*", "type", "", "", "type_id");
+										foreach ($alltypes as $type) {
+											echo "<option value='" . $type['type_id'] . "'>" . $type['type_name'] . "</option>";
+										}
+									?>
+								</select>
+							</div>
 						</div>
-					</div>
-					<!-- END Description Field -->
-					<!-- Start Approve Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Approve</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="text" name="approve" class="form-control" required="required" placeholder="Is it approved ?" />
+						<!-- END Categories Field -->
+						<!-- Start Tags Field -->
+						<div class="form-group form-group-lg">
+							<label class="col-sm-2 control-label">Tags</label>
+							<div class="col-sm-10 col-md-8">
+								<input type="text" name="tags" class="form-control" placeholder="Separate Tags With Comma (,)" />
+							</div>
 						</div>
-					</div>
-					<!-- END Approve Field -->
-					<!-- Start Price Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Price</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="text" name="price" class="form-control" required="required" placeholder="Item Price" />
+						<!-- END Tags Field -->
+						<!-- Start submit Field -->
+						<div class="form-group form-group-lg">
+							<div class="col-sm-offset-2 col-sm-10">
+								<input id="item_sumbit_button" type="submit" value="Add Item" class="btn btn-primary btn-sm" />
+								<a class="btn btn-primary btn-sm" href="items.php">back 
+									<i class="fa fa-chevron-right fa-xs"></i>
+								</a>
+								
+							</div>
 						</div>
-					</div>
-					<!-- END Price Field -->
-					<!-- Start price date time Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Last Price date</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="date" class="form-control" name="lastPriceDate" value="" />
+						<!-- END submit Field -->
+						<!-- Start error Field -->
+						<div class="form-group form-group-lg">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="signup_messages"></div>
+							</div>
 						</div>
-					</div>
-					<!-- END price date time Field -->
-
-					<!-- Start brand id Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Brand</label>
-						<div class="col-sm-10 col-md-8">
-							<select name="brand_id">
-								<option value="0">...</option>
-								<?php
-									$allbrands = getAllFrom("*", "brand", "", "", "id");
-									foreach ($allbrands as $brand) {
-										echo "<option value='" . $brand['id'] . "'>" . $brand['name'] . "</option>";
-									}
-								?>
-							</select>
-						</div>
-					</div>
-					<!-- END brand id Field -->
-					<!-- Start Members Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Member</label>
-						<div class="col-sm-10 col-md-8">
-							<select name="member">
-								<option value="0">...</option>
-								<?php
-									$allMembers = getAllFrom("*", "users", "", "", "UserID");
-									foreach ($allMembers as $user) {
-										echo "<option value='" . $user['UserID'] . "'>" . $user['Username'] . "</option>";
-									}
-								?>
-							</select>
-						</div>
-					</div>
-					<!-- END Members Field -->
-					<!-- Start Categories Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Type</label>
-						<div class="col-sm-10 col-md-8">
-							<select name="Type">
-								<option value="0">...</option>
-								<?php
-									$alltypes = getAllFrom("*", "type", "", "", "type_id");
-									foreach ($alltypes as $type) {
-										echo "<option value='" . $type['type_id'] . "'>" . $type['type_name'] . "</option>";
-									}
-								?>
-							</select>
-						</div>
-					</div>
-					<!-- END Categories Field -->
-					<!-- Start Tags Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Tags</label>
-						<div class="col-sm-10 col-md-8">
-							<input type="text" name="tags" class="form-control" placeholder="Separate Tags With Comma (,)" />
-						</div>
-					</div>
-					<!-- END Tags Field -->
-					<!-- Start submit Field -->
-					<div class="form-group form-group-lg">
-						<div class="col-sm-offset-2 col-sm-10">
-							<input id="item_sumbit_button" type="submit" value="Add Item" class="btn btn-primary btn-sm" />
-							<a class="btn btn-primary btn-sm" href="items.php">back 
-								<i class="fa fa-chevron-right fa-xs"></i>
-							</a>
-							
-						</div>
-					</div>
-					<!-- END submit Field -->
-					<!-- Start error Field -->
-					<div class="form-group form-group-lg">
-						<div class="col-sm-offset-2 col-sm-10">
-							<div class="signup_messages"></div>
-						</div>
-					</div>
-					<!-- END error Field -->
-				</form>
-			</div>
+						<!-- END error Field -->
+					</form>
+				</div>
 
 		<?php 
 
@@ -666,20 +666,15 @@
       			if (empty($formErrors)) {
 
 	      			// Update The Database With This Info
-	      			$stmt = $con->prepare("UPDATE items SET 
-					      								   		item_name = ?,
-					      								   		`number` = ?,
-					      								   		Approve = ?, 
-					      								   		price = ?,
-					      								   		Last_price_date = ?,
-					      								   		type_id = ?,
-					      								   		brand_id = ?,
-					      								   		Member_ID = ?,
-					      								   		tags = ?
+	      			$stmt = $con->prepare("UPDATE items SET item_name = ?, `number` = ?, Approve = ?, 
+					      								   		price = ?, Last_price_date = ?, `type_id` = ?, brand_id = ?,
+					      								   		Member_ID = ?, tags = ?
 					      								   WHERE 
 					      								   		Item_ID = ?");
 
-	      			$stmt->execute(array($name, $number, $approve, $price, $date, $member, $brand, $type, $tags, $id));
+	      			$stmt->execute(array($name, $number, $approve,
+																		$price, $date, $type, $brand,
+																		$member, $tags, $id));
 
 	       			// Echo Success Message
 	      			$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';

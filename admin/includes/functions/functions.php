@@ -186,3 +186,23 @@
 		return $lnk;
 		
 	}
+
+
+
+	/* 
+	** Delete Items Function v1.0
+	** Function To Delete Item In Database [ Function Accept Parameters ]
+	** $select = The Item To Select [ Example: user, item, category ]
+	** $from = The Table To Select From [ Example: users, items, categories ]
+	** $Value = The Value Of Select [ Example: Osama, Box, Electronics ]
+	*/
+
+	function deleteFrom($table, $id_name, $id_value) {
+
+		global $con;
+		$statement = $con->prepare("DELETE FROM $table WHERE $id_name = ?");
+		$statement->execute([$id_value]);
+		$count = $statement->rowCount();
+		return $count;
+
+	}

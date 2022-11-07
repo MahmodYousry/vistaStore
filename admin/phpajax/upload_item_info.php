@@ -55,7 +55,7 @@
                                         `Last_price_date` = ?,
                                         brand_id = ?,
                                         Member_ID = ?,
-                                        type_id = ?,
+                                        `type_id` = ?,
                                         tags = ? WHERE `Item_ID` = ?");
 
             $stmt->execute([$name, $number, $approve, $price, $lastPriceDate, $brand_id, $member, $Type, $tags, $main_id]);

@@ -12,6 +12,9 @@
 	$pageTitle = 'Admin | Types';
 
     if (isset($_SESSION['Username'])) {
+
+			$pageName = 'type';
+
       include 'init.php';
       $do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
 
@@ -46,8 +49,8 @@
 											echo "<td>" . $type['type_id'] . "</td>";
 											echo "<td>" . $type['type_name'] . "</td>";
 											echo "<td>";
-												echo "<a href='type.php?do=Edit&type_id=" . $type['type_id'] . "' class='btn btn-success' data-toggle='tooltip' data-placement='left' title='edit status name'><i class='fa fa-edit'></i> Edit</a>";
-												echo "<a href='type.php?do=Delete&type_id=" . $type['type_id'] . "' class='btn btn-danger confirm' data-toggle='tooltip' data-placement='left' title='Deletes the status from database'><i class='fa fa-close'></i> Delete</a>";
+												echo "<a href='type.php?do=Edit&type_id=" . $type['type_id'] . "' class='btn btn-success' data-toggle='tooltip' data-placement='left' title='edit type name'><i class='fa fa-edit'></i> Edit</a>";
+												echo "<a href='type.php?do=Delete&type_id=" . $type['type_id'] . "' class='btn btn-danger confirm' data-toggle='tooltip' data-placement='left' title='Deletes type from database'><i class='fa fa-close'></i> Delete</a>";
 											echo "</td>";
 										echo "</tr>";
 									}
@@ -87,8 +90,8 @@
 					<!-- Start submit Field -->
 					<div class="form-group form-group-lg">
 						<div class="col-sm-offset-2 col-sm-10">
-							<input type="submit" value="Add status" class="btn btn-primary btn-sm" />
-							<a class="btn btn-primary btn-sm" href="status.php">back 
+							<input type="submit" value="Add New Type" class="btn btn-primary btn-sm" />
+							<a class="btn btn-primary btn-sm" href="<?php echo $pageName; ?>.php">back 
 								<i class="fa fa-chevron-right fa-xs"></i>
 							</a>
 						</div>
@@ -167,7 +170,7 @@
 						<div class="form-group form-group-lg">
 							<div class="col-sm-offset-2 col-sm-10">
 								<input type="submit" value="Save Status" class="btn btn-primary btn-sm">
-								<a class="btn btn-primary btn-sm" href="status.php">back <i class="fa fa-chevron-right fa-xs"></i></a>
+								<a class="btn btn-primary btn-sm" href="<?php echo $pageName; ?>.php">back <i class="fa fa-chevron-right fa-xs"></i></a>
 							</div>
 						</div>
 						<!-- END submit Field -->
@@ -190,16 +193,17 @@
 	    } elseif ($do == 'Update') {
 
 	    	echo '<h1 class="text-center">Update status</h1>';
-      		echo '<div class="container">';
+      	echo '<div class="container">';
 
       		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       			// Get Variables From The Form
-      			$stat_id        = $_POST['stat_id'];
-      			$stat_name      = $_POST['name'];
+      			$type_id		= $_POST['type_id'];
+      			$type_name	= $_POST['name'];
+						
       			// Validate The Form
       			$formErrors = array();
-      			if (empty($stat_name)) { $formErrors[] = 'Name Can\'t be <strong>Empty</strong>'; }
+      			if (empty($type_name)) { $formErrors[] = 'Name Can\'t be <strong>Empty</strong>'; }
 
       			// Loop Into Errors Array And Echo It
       			foreach($formErrors as $error) { echo '<div class="alert alert-danger">' . $error . '</div>'; }
@@ -208,8 +212,8 @@
       			if (empty($formErrors)) {
 
 	      			// Update The Database With This Info
-	      			$stmt = $con->prepare("UPDATE status SET stat_name = ? WHERE stat_id = ?");
-	      			$stmt->execute([$stat_name, $stat_id]);
+	      			$stmt = $con->prepare("UPDATE `type` SET `type_name` = ? WHERE `type_id` = ?");
+	      			$stmt->execute([$type_name, $type_id]);
 
 	       			// Echo Success Message
 	      			$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';
@@ -224,27 +228,93 @@
 
       		}
 
-      		echo '</div>';
+      	echo '</div>';
 
 	    } elseif ($do == 'Delete') {
 
-				echo '<h1 class="text-center">Delete status</h1>';
+				echo '<h1 class="text-center">Delete Type</h1>';
       	echo '<div class="container">';
 
 					// Check If Get Request status Is Numberic & Get The Integer Value of it.
 					$type_id = isset($_GET['type_id']) && is_numeric($_GET['type_id']) ? intval($_GET['type_id']) : 0;
 
 					// Select All Data Depend on This ID
-					$check = checkItem('type_id', 'type', $type_id);
+					$check = checkItem('type_id', 'type', $type_id);					 
+					if ($check > 0) { // If data Found
+						
+						// check data in items bound to this type
+						$itemsCheck = checkItem('type_id', 'items', $type_id);
 
-					// If There's Such ID Show The Form
-					if ($check > 0) {
-	                    // begin to Delete
-						$stmt = $con->prepare("DELETE FROM type WHERE type_id = ?");
-						$stmt->execute([$type_id]);
-	                    // Echo msg
-						$theMsg = '<div class="alert alert-success">' . $stmt->rowCount() . ' Record Deleted</div>';
-						redirectHome($theMsg, 'back');
+						if ($itemsCheck > 0) { // there is items bound to this type
+
+							// check for number of items bound to this type
+							$itemsSt = $con->prepare("SELECT * FROM items WHERE `type_id` = ?");
+							$checkitmes = $itemsSt->execute([$type_id]);
+							$items_gets = $itemsSt->fetchAll();
+							$items_Number = $itemsSt->rowCount();
+
+							echo '<div class="alert alert-info text-capitalize">You Cannot Delete This Type Because There is Items Related To it</div>';
+							echo '<div class="alert alert-warning text-capitalize">you need to delete <strong>'.$items_Number.' Items </strong> Bound To This Type in order to delete this type</div>';
+							
+
+							foreach ($items_gets as $items) { // do this for every items bound to this type
+
+								// check if there is images bound to these items
+								$stmthh = $con->prepare('SELECT * FROM item_imgs WHERE item_ID = ?');
+								$checkImgs = $stmthh->execute([$items['Item_ID']]);
+								$items_images = $stmthh->fetchAll();
+
+								foreach ($items_images as $item_image) { // do this for every image found
+
+										// Assign every link in Single Variable
+										$imageLink = "../products/". $item_image['img_src'];
+
+										if (file_exists($imageLink)) { // if file exits
+
+											// delete the image as file
+											unlink($imageLink);
+
+											echo '<div class="alert alert-success">'.__DIR__ .$imageLink.' <strong>has been deleted</strong></div>';
+
+											// delete images as data
+											$stmt2 = $con->prepare("DELETE FROM item_imgs WHERE item_ID = ?");
+											$stmt2->execute([$items['Item_ID']]);
+
+										} else {
+
+												echo '<div class="alert alert-success text-capitalize">';
+													echo $imageLink . ' <strong>File Not Found on the server</strong>';
+												echo '</div>';
+
+												// delete images as data
+												$stmt22 = $con->prepare("DELETE FROM item_imgs WHERE item_ID = ?");
+												$stmt22->execute([$items['Item_ID']]);
+										}
+
+								}
+
+								// Delete every Item related to this type
+								$deleteResult = deleteFrom('items', 'Item_ID', $items['Item_ID']);
+
+								// Delete the Type in the end
+								$deleteResult = deleteFrom('type', 'type_id', $type_id);
+
+								// show the success msg
+								echo '<div class="alert alert-success">' . $deleteResult . ' Items Deleted</div>';
+								//redirectHome($theMsg, 'back');
+								echo '<a class="btn btn-primary btn-sm" href="'.$pageName.'.php">back <i class="fa fa-chevron-right fa-xs"></i></a>';
+
+							}
+
+						} else { // there is no items bound to this type
+
+								// begin to Delete
+								$deleteResult = deleteFrom('type', 'type_id', $type_id);
+								$theMsg = '<div class="alert alert-success">' . $deleteResult . ' Record Deleted</div>';
+								redirectHome($theMsg, 'back');
+
+						}
+
 
 					} else {
 
