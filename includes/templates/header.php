@@ -83,33 +83,47 @@
     <div class="upper-bar">
 
         <div class="container">
-        <a class="text-capitalize" href="./admin"><span>admin</span></a>
-          <?php
-            if (isset($_SESSION['user'])) { ?>
-
-            <img class="my-image img-thubmnail img-circle" src="noprofile_lg.png" alt="" />
-            <div class="btn-group my-info">
-              <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <?php echo $sessionUser; ?>
-                <span class="caret"></span>
-              </span>
-              <ul class="dropdown-menu">
-                <li><a href="profile.php">My Profile</a></li>
-                <li><a href="newad.php">New Item</a></li>
-                <li><a href="profile.php#my-ad">My Items</a></li>
-                <li><a href="logout.php">Logout</a></li>
-              </ul>
-            </div>
-
-
+          <div class="middle">
+            <a class="text-capitalize" href="./admin"><span>admin</span></a>
             <?php
+              if (isset($_SESSION['user'])) {
 
+                // get item images by item id
+                $stmtimg = $con->prepare("SELECT avatar FROM users WHERE UserID = ?");
+                $stmtimg->execute([$_SESSION['uid']]);
+                $itemImgs = $stmtimg->fetch();
 
-            } else {
-          ?>
+                if ($itemImgs['avatar'] > 0) { // if there is avatar echo it
+                  $avLink = "admin/uploads/avatars/" . $itemImgs['avatar'];
+                } else { // if there is not avatar found for this user echo defualt img
+                  $avLink = "admin/uploads/default/noprofile_lg.jpg";
+                }
+
+            ?>
+
+                <div class="btn-group my-info">
+                  <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <img class="my-image img-thubmnail img-circle" src="<?php echo $avLink; ?>" alt="" />
+                    <?php echo "<span class='text-capitalize'>".$sessionUser."</span>"; ?>
+                    <span class="caret"></span>
+                  </span>
+                  <ul class="dropdown-menu">
+                    <li><a href="profile.php">My Profile</a></li>
+                    <li><a href="newad.php">New Item</a></li>
+                    <li><a href="profile.php#my-ad">My Items</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                  </ul>
+                </div>
+
+              <?php
+              
+              } else {
+            ?>
+          
           <a href="login.php"> <span class="pull-right">Login/Signup</span></a>
           
           <?php } ?>
+          </div>
         </div>
     </div>
     <nav class="navbar navbar-inverse">

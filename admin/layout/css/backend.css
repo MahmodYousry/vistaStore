@@ -175,6 +175,11 @@ body {
 .latest-users li {
   padding: 10px;
   overflow: hidden;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .latest-users li:nth-child(odd) {

@@ -60,15 +60,18 @@
 						</div>
 					</div>
 
-			<?php } else {
+			<?php
 
-				echo '<div class="container">';
-					echo '<div class="nice-message">There\'s No Status To Show</div>';
-					echo '<a href="type.php?do=Add" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New type</a>';
-				echo '</div>';
+				} else {
 
+					echo '<div class="container">';
+						echo '<div class="nice-message">There\'s No Status To Show</div>';
+						echo '<a href="type.php?do=Add" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New type</a>';
+					echo '</div>';
+					
+				}
 
-			} ?>
+			?>
 
 		<?php 
 

@@ -172,6 +172,24 @@
 	}
 
 
+	/*
+	**	Get Members without admins Function v1.0
+	**	Function To get Latest items from database [ Users, Items, Comments ]
+	**	$select = Field To Select.
+	**	$table = The Tabke To Choose From.
+	**  $order = the DESC ordering.
+	**	$limit = number of records to get.
+	*/
+	
+	function getAllMembers() {
+		global $con;
+		$getStmt = $con->prepare("SELECT * FROM users WHERE GroupID = 0");
+		$getStmt->execute();
+		$rows = $getStmt->rowCount();
+		return $rows;
+	}
+
+
 	// function that gets image from items to show it on items.php
 	function getimg($img) {
 		
@@ -190,7 +208,7 @@
 
 
 	/* 
-	** Delete Items Function v1.0
+	** Delete Complete Row Function v1.0
 	** Function To Delete Item In Database [ Function Accept Parameters ]
 	** $select = The Item To Select [ Example: user, item, category ]
 	** $from = The Table To Select From [ Example: users, items, categories ]
@@ -206,3 +224,60 @@
 		return $count;
 
 	}
+
+
+	/* 
+	** get avatar from db using id of row in specific table Function v1.0
+	** $select = The Item To Select [ Example: user, item, category ]
+	** $from = The Table To Select From [ Example: users, items, categories ]
+	** $Value = The Value Of Select [ Example: Osama, Box, Electronics ]
+	*/
+
+	function getAvatar($row, $table, $idRowName, $id) {
+
+		global $con;
+		$statement = $con->prepare("SELECT $row FROM $table WHERE $idRowName = ?");
+		$statement->execute([$id]);
+		$avaUrl = $statement->fetch();
+		return $avaUrl[$row];
+
+	}
+
+
+		/* 
+	** get avatar from db using id of user Function v1.0
+	** $select = The Item To Select [ Example: user, item, category ]
+	** $from = The Table To Select From [ Example: users, items, categories ]
+	** $Value = The Value Of Select [ Example: Osama, Box, Electronics ]
+	*/
+
+	function getUserAvatar($id) {
+
+		global $con;
+		$statement = $con->prepare("SELECT avatar FROM users WHERE UserID = ?");
+		$statement->execute([$id]);
+		$avaUrl = $statement->fetch();
+
+		if ($statement->rowCount() > 0) {
+			return $avaUrl['avatar'];
+		} else {
+			return 0;
+		}
+
+	}
+
+	/* 
+	** DeleteServFile Function v1.0
+	** To delete files Using the Url Given Parameters
+	*/
+
+	function DeleteServFile($url) {
+		if (file_exists($url)) { // if file exits
+			// Delete The file
+			unlink($url);
+		} else {
+			return "<div class='alert alert-info text-capitalize'>".$url." <strong>File Does Not Exist In The Server</strong></div>";
+		}
+	}
+
+	

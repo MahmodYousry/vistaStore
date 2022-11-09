@@ -1,7 +1,6 @@
 <?php
 
     ob_start(); // OutPut Buffering Start
-
     session_start();
     
     if (isset($_SESSION['Username'])) {
@@ -33,7 +32,7 @@
                 <i class="fa fa-users"></i>
                 <div class="info">
                   Total Members
-                  <span><a href="members.php"><?php echo countItems('UserID', 'users') ?></a></span>
+                  <span><a href="members.php"><?php echo getAllMembers() ?></a></span>
                 </div>
               </div>
             </div>
